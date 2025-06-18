@@ -42,7 +42,4 @@
   }
 }
 
-/* 为主要内容添加底部边距，避免被footer遮挡 */
-body {
-  padding-bottom: 60px;
-}
+/* 底部边距已在App.css中定义 */
