@@ -47,6 +47,7 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
   const [timeLeft, setTimeLeft] = useState(60);
   const [gameStarted, setGameStarted] = useState(false);
   const [gameOver, setGameOver] = useState(false);
+  const [gamePaused, setGamePaused] = useState(false);
   const [level, setLevel] = useState(1);
   const [chapterLevel, setChapterLevel] = useState(1);
 
@@ -146,6 +147,18 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
 
 
 
+  // 暂停/继续游戏
+  const togglePause = useCallback(() => {
+    setGamePaused(prev => !prev);
+    if (backgroundMusicRef.current) {
+      if (gamePaused) {
+        backgroundMusicRef.current.play().catch(console.error);
+      } else {
+        backgroundMusicRef.current.pause();
+      }
+    }
+  }, [gamePaused]);
+
   // 更新游戏状态引用
   useEffect(() => {
     gameStateRef.current = { gameStarted, gameOver, level, gameMode, currentChapter, chapterLevel };
@@ -155,7 +168,7 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
     const { gameStarted, gameOver, level, gameMode, currentChapter, chapterLevel } = gameStateRef.current;
     
-    if (!gameStarted || gameOver) return;
+    if (!gameStarted || gameOver || gamePaused) return;
 
     const key = event.key;
     
@@ -208,7 +221,7 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
     } else if (key === 'Escape') {
       setCurrentInput('');
     }
-  }, [currentInput, moles, score, chapterLevel, level, gameMode]);
+  }, [currentInput, moles, score, chapterLevel, level, gameMode, gamePaused]);
 
   // 键盘事件监听
   useEffect(() => {
@@ -218,7 +231,7 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
 
   // 游戏计时器
   useEffect(() => {
-    if (gameStarted && !gameOver && timeLeft > 0) {
+    if (gameStarted && !gameOver && !gamePaused && timeLeft > 0) {
       const timer = setTimeout(() => {
         setTimeLeft(prev => {
           if (prev <= 1) {
@@ -240,18 +253,18 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [gameStarted, gameOver, timeLeft, gameMode, chapterLevel, currentChapter, onChapterComplete]);
+  }, [gameStarted, gameOver, gamePaused, timeLeft, gameMode, chapterLevel, currentChapter, onChapterComplete]);
 
   // 地鼠生成器
   useEffect(() => {
-    if (gameStarted && !gameOver) {
+    if (gameStarted && !gameOver && !gamePaused) {
       const currentLevel = gameMode === 'chapter' ? chapterLevel : level;
       const baseInterval = gameMode === 'chapter' ? 2000 : 2500;
       const spawnInterval = Math.max(baseInterval - (currentLevel - 1) * 20, 500);
       const interval = setInterval(spawnMole, spawnInterval);
       return () => clearInterval(interval);
     }
-  }, [gameStarted, gameOver, level, chapterLevel, gameMode, spawnMole]);
+  }, [gameStarted, gameOver, gamePaused, level, chapterLevel, gameMode, spawnMole]);
 
   // 自动开始游戏
   useEffect(() => {
@@ -288,6 +301,17 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
         )}
         
         <div className="game-area">
+          {/* 暂停/继续按钮 */}
+          {gameStarted && !gameOver && (
+            <button 
+              className="pause-toggle-button" 
+              onClick={togglePause}
+              title={gamePaused ? '继续游戏' : '暂停游戏'}
+            >
+              {gamePaused ? '▶️' : '⏸️'}
+              <span>{gamePaused ? '继续' : '暂停'}</span>
+            </button>
+          )}
 
           <div className="moles-container">
             {moles.map(mole => (
@@ -304,6 +328,18 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
               </div>
             ))}
           </div>
+
+          {gamePaused && (
+            <div className="pause-overlay">
+              <div className="pause-message">
+                <h2>游戏已暂停</h2>
+                <p>点击继续按钮恢复游戏</p>
+                <button className="resume-button" onClick={togglePause}>
+                  继续游戏
+                </button>
+              </div>
+            </div>
+          )}
 
           {gameOver && (
             <div className="game-over">
