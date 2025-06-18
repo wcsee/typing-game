@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- 地鼠身体 -->
+  <ellipse cx="32" cy="45" rx="18" ry="15" fill="#8B4513" stroke="#654321" stroke-width="1"/>
+  
+  <!-- 地鼠头部 -->
+  <circle cx="32" cy="28" r="16" fill="#D2691E" stroke="#8B4513" stroke-width="1"/>
+  
+  <!-- 地鼠耳朵 -->
+  <ellipse cx="22" cy="18" rx="4" ry="6" fill="#8B4513" stroke="#654321" stroke-width="1"/>
+  <ellipse cx="42" cy="18" rx="4" ry="6" fill="#8B4513" stroke="#654321" stroke-width="1"/>
+  <ellipse cx="22" cy="19" rx="2" ry="3" fill="#FFB6C1"/>
+  <ellipse cx="42" cy="19" rx="2" ry="3" fill="#FFB6C1"/>
+  
+  <!-- 地鼠眼睛 -->
+  <circle cx="27" cy="25" r="3" fill="#000"/>
+  <circle cx="37" cy="25" r="3" fill="#000"/>
+  <circle cx="27.5" cy="24" r="1" fill="#FFF"/>
+  <circle cx="37.5" cy="24" r="1" fill="#FFF"/>
+  
+  <!-- 地鼠鼻子 -->
+  <ellipse cx="32" cy="30" rx="2" ry="1.5" fill="#000"/>
+  
+  <!-- 地鼠嘴巴 -->
+  <path d="M 29 33 Q 32 36 35 33" stroke="#000" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  
+  <!-- 地鼠牙齿 -->
+  <rect x="30" y="32" width="1.5" height="3" fill="#FFF" rx="0.5"/>
+  <rect x="32.5" y="32" width="1.5" height="3" fill="#FFF" rx="0.5"/>
+  
+  <!-- 地鼠爪子 -->
+  <ellipse cx="20" cy="50" rx="3" ry="2" fill="#8B4513"/>
+  <ellipse cx="44" cy="50" rx="3" ry="2" fill="#8B4513"/>
+  
+  <!-- 可爱的腮红 -->
+  <circle cx="18" cy="30" r="2" fill="#FFB6C1" opacity="0.6"/>
+  <circle cx="46" cy="30" r="2" fill="#FFB6C1" opacity="0.6"/>
+</svg>

@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- 背景圆形 -->
+  <circle cx="256" cy="256" r="240" fill="#4CAF50" stroke="#388E3C" stroke-width="8"/>
+  
+  <!-- 土堆 -->
+  <ellipse cx="256" cy="400" rx="160" ry="65" fill="#8D6E63"/>
+  <ellipse cx="256" cy="385" rx="130" ry="50" fill="#A1887F"/>
+  <ellipse cx="256" cy="375" rx="100" ry="35" fill="#BCAAA4"/>
+  
+  <!-- 地鼠身体 -->
+  <ellipse cx="256" cy="340" rx="90" ry="75" fill="#8B4513" stroke="#654321" stroke-width="5"/>
+  
+  <!-- 地鼠头部 -->
+  <circle cx="256" cy="220" r="85" fill="#D2691E" stroke="#8B4513" stroke-width="5"/>
+  
+  <!-- 地鼠耳朵 -->
+  <ellipse cx="200" cy="170" rx="20" ry="32" fill="#8B4513" stroke="#654321" stroke-width="4"/>
+  <ellipse cx="312" cy="170" rx="20" ry="32" fill="#8B4513" stroke="#654321" stroke-width="4"/>
+  <ellipse cx="200" cy="175" rx="10" ry="16" fill="#FFB6C1"/>
+  <ellipse cx="312" cy="175" rx="10" ry="16" fill="#FFB6C1"/>
+  
+  <!-- 地鼠眼睛 -->
+  <circle cx="225" cy="200" r="16" fill="#000"/>
+  <circle cx="287" cy="200" r="16" fill="#000"/>
+  <circle cx="228" cy="195" r="5" fill="#FFF"/>
+  <circle cx="290" cy="195" r="5" fill="#FFF"/>
+  
+  <!-- 眼睫毛 -->
+  <path d="M 210 185 L 215 180" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+  <path d="M 220 180 L 225 175" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+  <path d="M 287 175 L 292 180" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+  <path d="M 297 180 L 302 185" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- 地鼠鼻子 -->
+  <ellipse cx="256" cy="230" rx="10" ry="8" fill="#000"/>
+  
+  <!-- 地鼠嘴巴 -->
+  <path d="M 230 250 Q 256 270 282 250" stroke="#000" stroke-width="6" fill="none" stroke-linecap="round"/>
+  
+  <!-- 地鼠牙齿 -->
+  <rect x="245" y="245" width="8" height="16" fill="#FFF" rx="2"/>
+  <rect x="259" y="245" width="8" height="16" fill="#FFF" rx="2"/>
+  
+  <!-- 地鼠爪子 -->
+  <ellipse cx="180" cy="370" rx="15" ry="10" fill="#8B4513"/>
+  <ellipse cx="332" cy="370" rx="15" ry="10" fill="#8B4513"/>
+  
+  <!-- 爪子细节 -->
+  <ellipse cx="175" cy="368" rx="3" ry="2" fill="#654321"/>
+  <ellipse cx="180" cy="366" rx="3" ry="2" fill="#654321"/>
+  <ellipse cx="185" cy="368" rx="3" ry="2" fill="#654321"/>
+  <ellipse cx="327" cy="368" rx="3" ry="2" fill="#654321"/>
+  <ellipse cx="332" cy="366" rx="3" ry="2" fill="#654321"/>
+  <ellipse cx="337" cy="368" rx="3" ry="2" fill="#654321"/>
+  
+  <!-- 可爱的腮红 -->
+  <circle cx="150" cy="230" r="12" fill="#FFB6C1" opacity="0.6"/>
+  <circle cx="362" cy="230" r="12" fill="#FFB6C1" opacity="0.6"/>
+  
+  <!-- 装饰性草丛 -->
+  <path d="M 80 450 Q 90 430 100 450 Q 110 430 120 450 Q 130 430 140 450" stroke="#2E7D32" stroke-width="4" fill="none"/>
+  <path d="M 372 450 Q 382 430 392 450 Q 402 430 412 450 Q 422 430 432 450" stroke="#2E7D32" stroke-width="4" fill="none"/>
+  
+  <!-- 游戏元素：键盘按键 -->
+  <rect x="60" y="60" width="40" height="40" fill="#FFF" stroke="#666" stroke-width="3" rx="5"/>
+  <text x="80" y="85" text-anchor="middle" font-family="Arial" font-size="24" font-weight="bold" fill="#333">A</text>
+  
+  <rect x="412" y="60" width="40" height="40" fill="#FFF" stroke="#666" stroke-width="3" rx="5"/>
+  <text x="432" y="85" text-anchor="middle" font-family="Arial" font-size="24" font-weight="bold" fill="#333">Z</text>
+  
+  <rect x="60" y="412" width="40" height="40" fill="#FFF" stroke="#666" stroke-width="3" rx="5"/>
+  <text x="80" y="437" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold" fill="#333">123</text>
+  
+  <rect x="412" y="412" width="40" height="40" fill="#FFF" stroke="#666" stroke-width="3" rx="5"/>
+  <text x="432" y="437" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold" fill="#333">ABC</text>
+  
+  <!-- 星星装饰 -->
+  <path d="M 150 100 L 152 106 L 158 106 L 153 110 L 155 116 L 150 112 L 145 116 L 147 110 L 142 106 L 148 106 Z" fill="#FFD700"/>
+  <path d="M 362 100 L 364 106 L 370 106 L 365 110 L 367 116 L 362 112 L 357 116 L 359 110 L 354 106 L 360 106 Z" fill="#FFD700"/>
+</svg>

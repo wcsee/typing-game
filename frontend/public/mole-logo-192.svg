@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <!-- 背景圆形 -->
+  <circle cx="96" cy="96" r="90" fill="#4CAF50" stroke="#388E3C" stroke-width="3"/>
+  
+  <!-- 土堆 -->
+  <ellipse cx="96" cy="150" rx="60" ry="25" fill="#8D6E63"/>
+  <ellipse cx="96" cy="145" rx="50" ry="20" fill="#A1887F"/>
+  
+  <!-- 地鼠身体 -->
+  <ellipse cx="96" cy="130" rx="35" ry="28" fill="#8B4513" stroke="#654321" stroke-width="2"/>
+  
+  <!-- 地鼠头部 -->
+  <circle cx="96" cy="85" r="32" fill="#D2691E" stroke="#8B4513" stroke-width="2"/>
+  
+  <!-- 地鼠耳朵 -->
+  <ellipse cx="75" cy="65" rx="8" ry="12" fill="#8B4513" stroke="#654321" stroke-width="2"/>
+  <ellipse cx="117" cy="65" rx="8" ry="12" fill="#8B4513" stroke="#654321" stroke-width="2"/>
+  <ellipse cx="75" cy="67" rx="4" ry="6" fill="#FFB6C1"/>
+  <ellipse cx="117" cy="67" rx="4" ry="6" fill="#FFB6C1"/>
+  
+  <!-- 地鼠眼睛 -->
+  <circle cx="85" cy="78" r="6" fill="#000"/>
+  <circle cx="107" cy="78" r="6" fill="#000"/>
+  <circle cx="86" cy="76" r="2" fill="#FFF"/>
+  <circle cx="108" cy="76" r="2" fill="#FFF"/>
+  
+  <!-- 地鼠鼻子 -->
+  <ellipse cx="96" cy="88" rx="4" ry="3" fill="#000"/>
+  
+  <!-- 地鼠嘴巴 -->
+  <path d="M 88 95 Q 96 102 104 95" stroke="#000" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <!-- 地鼠牙齿 -->
+  <rect x="92" y="93" width="3" height="6" fill="#FFF" rx="1"/>
+  <rect x="97" y="93" width="3" height="6" fill="#FFF" rx="1"/>
+  
+  <!-- 地鼠爪子 -->
+  <ellipse cx="70" cy="140" rx="6" ry="4" fill="#8B4513"/>
+  <ellipse cx="122" cy="140" rx="6" ry="4" fill="#8B4513"/>
+  
+  <!-- 可爱的腮红 -->
+  <circle cx="60" cy="88" r="4" fill="#FFB6C1" opacity="0.6"/>
+  <circle cx="132" cy="88" r="4" fill="#FFB6C1" opacity="0.6"/>
+  
+  <!-- 装饰性草丛 -->
+  <path d="M 30 170 Q 35 160 40 170 Q 45 160 50 170" stroke="#2E7D32" stroke-width="2" fill="none"/>
+  <path d="M 142 170 Q 147 160 152 170 Q 157 160 162 170" stroke="#2E7D32" stroke-width="2" fill="none"/>
+  
+  <!-- 游戏元素：键盘按键 -->
+  <rect x="25" y="25" width="15" height="15" fill="#FFF" stroke="#666" stroke-width="1" rx="2"/>
+  <text x="32.5" y="36" text-anchor="middle" font-family="Arial" font-size="10" fill="#333">A</text>
+  
+  <rect x="152" y="25" width="15" height="15" fill="#FFF" stroke="#666" stroke-width="1" rx="2"/>
+  <text x="159.5" y="36" text-anchor="middle" font-family="Arial" font-size="10" fill="#333">Z</text>
+</svg>

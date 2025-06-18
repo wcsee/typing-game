@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import './App.css';
+import Footer from './components/Footer';
 
 interface Mole {
   id: number;
@@ -104,7 +105,14 @@ function App() {
   };
 
   // 使用ref保存最新的状态值
-  const gameStateRef = useRef({ gameStarted, gameOver, currentInput, moles, score, level });
+  const gameStateRef = useRef<{
+    gameStarted: boolean;
+    gameOver: boolean;
+    currentInput: string;
+    moles: Mole[];
+    score: number;
+    level: number;
+  }>({ gameStarted, gameOver, currentInput, moles, score, level });
   gameStateRef.current = { gameStarted, gameOver, currentInput, moles, score, level };
 
   // 处理键盘输入
@@ -124,8 +132,8 @@ function App() {
       setCurrentInput(newInput);
       
       // 检查是否匹配任何可见地鼠的单词
-      const visibleMoles = moles.filter(mole => mole.isVisible);
-      const matchedMole = visibleMoles.find(mole => mole.word === newInput);
+      const visibleMoles = moles.filter((mole: Mole) => mole.isVisible);
+      const matchedMole = visibleMoles.find((mole: Mole) => mole.word === newInput);
       
       if (matchedMole) {
         // 击中地鼠 - 添加击中效果
@@ -149,7 +157,7 @@ function App() {
         }
       } else {
         // 检查当前输入是否是任何可见地鼠单词的开头
-        const hasValidPrefix = visibleMoles.some(mole => mole.word.startsWith(newInput));
+        const hasValidPrefix = visibleMoles.some((mole: Mole) => mole.word.startsWith(newInput));
         if (!hasValidPrefix && newInput.length > 0) {
           // 如果输入不匹配任何可见地鼠的开头，清空输入
           setCurrentInput('');
@@ -278,6 +286,7 @@ function App() {
           </>
         )}
       </div>
+      <Footer />
     </div>
   );
 }

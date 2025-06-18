@@ -1,20 +1,15 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "快乐打地鼠",
+  "name": "快乐打地鼠 - 打字练习游戏",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "logo192.png",
-      "type": "image/png",
+      "src": "mole-logo-192.svg",
+      "type": "image/svg+xml",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
-      "type": "image/png",
+      "src": "mole-logo-512.svg",
+      "type": "image/svg+xml",
       "sizes": "512x512"
     }
   ],
