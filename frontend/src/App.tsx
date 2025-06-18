@@ -198,7 +198,7 @@ function App() {
   return (
     <div className="App">
       <div className="game-header">
-        <h1>🐹 打地鼠打字练习</h1>
+        <h1>🐹 《快乐打地鼠》打字练习</h1>
         <div className="game-stats">
           <div className="stat">
             <span className="stat-label">得分:</span>
@@ -227,7 +227,7 @@ function App() {
       <div className="game-area">
         {!gameStarted && !gameOver && (
           <div className="game-start">
-            <h2>🎯 《打地鼠》打字练习游戏</h2>
+            <h2>🎯 《快乐打地鼠》打字练习</h2>
             <div className="game-rules">
               <p><strong>📚 等级系统 (共100级):</strong></p>
               <p>• 等级 1-10: 字母练习 (a-z)</p>
