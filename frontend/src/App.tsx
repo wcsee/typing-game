@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import './App.css';
 
 interface Mole {
@@ -65,11 +65,11 @@ function App() {
     }
   };
 
-  // 生成随机位置
+  // 生成随机位置 - 确保地鼠完全在可视区域内
   const generateRandomPosition = () => {
     return {
-      x: Math.random() * 80 + 5, // 5% to 85% of screen width
-      y: Math.random() * 60 + 15  // 15% to 75% of screen height
+      x: Math.random() * 70 + 10, // 10% to 80% of screen width (留更多边距)
+      y: Math.random() * 50 + 20  // 20% to 70% of screen height (留更多边距)
     };
   };
 
@@ -103,25 +103,74 @@ function App() {
     setCurrentInput('');
   };
 
-  // 处理输入
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.toLowerCase();
-    setCurrentInput(value);
+  // 使用ref保存最新的状态值
+  const gameStateRef = useRef({ gameStarted, gameOver, currentInput, moles, score, level });
+  gameStateRef.current = { gameStarted, gameOver, currentInput, moles, score, level };
+
+  // 处理键盘输入
+  const handleKeyPress = useCallback((e: KeyboardEvent) => {
+    const { gameStarted, gameOver, currentInput, moles, score, level } = gameStateRef.current;
+    if (!gameStarted || gameOver) return;
     
-    // 检查是否匹配任何地鼠的单词
-    const matchedMole = moles.find(mole => mole.word === value);
-    if (matchedMole) {
-      // 击中地鼠
-      setScore(prev => prev + 10 * level);
-      setMoles(prev => prev.filter(mole => mole.id !== matchedMole.id));
-      setCurrentInput('');
+    // 防止修饰键（Shift、Ctrl、Alt等）干扰输入
+    if (e.ctrlKey || e.altKey || e.metaKey) return;
+    
+    const key = e.key.toLowerCase();
+    if (key.match(/^[a-z]$/)) {
+      // 防止事件冒泡和默认行为
+      e.preventDefault();
       
-      // 升级逻辑：每50分升一级，最高100级
-      if ((score + 10 * level) % 50 === 0 && level < 100) {
-        setLevel(prev => prev + 1);
+      const newInput = currentInput + key;
+      setCurrentInput(newInput);
+      
+      // 检查是否匹配任何可见地鼠的单词
+      const visibleMoles = moles.filter(mole => mole.isVisible);
+      const matchedMole = visibleMoles.find(mole => mole.word === newInput);
+      
+      if (matchedMole) {
+        // 击中地鼠 - 添加击中效果
+        setMoles(prev => prev.map(mole => 
+          mole.id === matchedMole.id 
+            ? { ...mole, isVisible: false } 
+            : mole
+        ));
+        
+        // 延迟移除地鼠以显示消失动画
+        setTimeout(() => {
+          setMoles(prev => prev.filter(mole => mole.id !== matchedMole.id));
+        }, 500);
+        
+        setScore(prev => prev + 10 * level);
+        setCurrentInput('');
+        
+        // 升级逻辑：每50分升一级，最高100级
+        if ((score + 10 * level) % 50 === 0 && level < 100) {
+          setLevel(prev => prev + 1);
+        }
+      } else {
+        // 检查当前输入是否是任何可见地鼠单词的开头
+        const hasValidPrefix = visibleMoles.some(mole => mole.word.startsWith(newInput));
+        if (!hasValidPrefix && newInput.length > 0) {
+          // 如果输入不匹配任何可见地鼠的开头，清空输入
+          setCurrentInput('');
+        }
       }
+    } else if (key === 'backspace') {
+      e.preventDefault();
+      setCurrentInput(prev => prev.slice(0, -1));
+    } else if (key === 'escape') {
+      e.preventDefault();
+      setCurrentInput('');
     }
-  };
+  }, []);
+  
+  // 监听键盘事件
+  useEffect(() => {
+    if (gameStarted && !gameOver) {
+      window.addEventListener('keydown', handleKeyPress);
+      return () => window.removeEventListener('keydown', handleKeyPress);
+    }
+  }, [gameStarted, gameOver, handleKeyPress]);
 
   // 游戏计时器
   useEffect(() => {
@@ -178,7 +227,7 @@ function App() {
       <div className="game-area">
         {!gameStarted && !gameOver && (
           <div className="game-start">
-            <h2>🎯 打地鼠打字练习游戏</h2>
+            <h2>🎯 《打地鼠》打字练习游戏</h2>
             <div className="game-rules">
               <p><strong>📚 等级系统 (共100级):</strong></p>
               <p>• 等级 1-10: 字母练习 (a-z)</p>
@@ -211,22 +260,11 @@ function App() {
 
         {gameStarted && (
           <>
-            <div className="input-area">
-              <input
-                type="text"
-                value={currentInput}
-                onChange={handleInputChange}
-                placeholder="输入单词击打地鼠..."
-                className="word-input"
-                autoFocus
-              />
-            </div>
-
             <div className="moles-container">
               {moles.map(mole => (
                 <div
                   key={mole.id}
-                  className="mole"
+                  className={`mole ${!mole.isVisible ? 'hit' : ''}`}
                   style={{
                     left: `${mole.position.x}%`,
                     top: `${mole.position.y}%`

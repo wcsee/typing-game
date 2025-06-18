@@ -160,34 +160,47 @@ body {
   transform: translateY(-1px);
 }
 
-/* 输入区域 */
-.input-area {
-  margin-bottom: 30px;
-  z-index: 100;
-}
-
-.word-input {
-  padding: 15px 25px;
-  font-size: 1.3rem;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  color: white;
+/* 当前输入显示 */
+.current-input-display {
   text-align: center;
-  width: 300px;
-  outline: none;
-  transition: all 0.3s ease;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.word-input::placeholder {
-  color: rgba(255, 255, 255, 0.7);
+.input-label {
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-right: 10px;
 }
 
-.word-input:focus {
-  border-color: #feca57;
-  box-shadow: 0 0 20px rgba(254, 202, 87, 0.5);
-  background: rgba(255, 255, 255, 0.2);
+.input-text {
+  color: #feca57;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  background: rgba(254, 202, 87, 0.2);
+  padding: 5px 10px;
+  border-radius: 5px;
+  min-width: 20px;
+  display: inline-block;
+}
+
+.cursor {
+  color: #feca57;
+  font-size: 1.5rem;
+  font-weight: bold;
+  animation: blink 1s infinite;
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
 
 /* 地鼠容器 */
@@ -230,9 +243,9 @@ body {
 }
 
 .mole-emoji {
-  font-size: 3rem;
-  margin-bottom: 5px;
-  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+  font-size: 4.5rem;
+  margin-bottom: 8px;
+  filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.4));
   transition: transform 0.2s ease;
 }
 
@@ -243,20 +256,22 @@ body {
 .mole-word {
   background: linear-gradient(45deg, #ff6b6b, #feca57);
   color: white;
-  padding: 8px 15px;
-  border-radius: 20px;
+  padding: 12px 20px;
+  border-radius: 25px;
   font-weight: bold;
-  font-size: 1rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(5px);
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  font-size: 1.4rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  border: 3px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(8px);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
   transition: all 0.2s ease;
+  min-width: 60px;
+  text-align: center;
 }
 
 .mole:hover .mole-word {
   transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
 }
 
 /* 响应式设计 */
@@ -327,18 +342,64 @@ body {
 
 /* 特殊效果 */
 .mole.hit {
-  animation: moleHit 0.5s ease-out;
+  animation: moleHit 0.5s ease-out forwards;
+  pointer-events: none;
+}
+
+.mole.hit .mole-emoji {
+  animation: emojiHit 0.5s ease-out forwards;
+}
+
+.mole.hit .mole-word {
+  animation: wordHit 0.5s ease-out forwards;
 }
 
 @keyframes moleHit {
   0% {
     transform: scale(1);
+    opacity: 1;
   }
-  50% {
-    transform: scale(1.3) rotate(10deg);
+  30% {
+    transform: scale(1.2) rotate(5deg);
+    opacity: 1;
   }
   100% {
-    transform: scale(0) rotate(360deg);
+    transform: scale(0.3) rotate(180deg) translateY(-50px);
+    opacity: 0;
+  }
+}
+
+@keyframes emojiHit {
+  0% {
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.4));
+  }
+  30% {
+    transform: scale(1.3) rotate(-10deg);
+    filter: drop-shadow(5px 5px 10px rgba(255, 215, 0, 0.6)) brightness(1.3);
+  }
+  100% {
+    transform: scale(0.2) rotate(-90deg) translateY(-30px);
+    filter: drop-shadow(0px 0px 0px transparent) brightness(2);
+    opacity: 0;
+  }
+}
+
+@keyframes wordHit {
+  0% {
+    transform: scale(1) rotate(0deg);
+    background: linear-gradient(45deg, #ff6b6b, #feca57);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+  30% {
+    transform: scale(1.1) rotate(5deg);
+    background: linear-gradient(45deg, #00ff00, #ffff00);
+    box-shadow: 0 8px 30px rgba(0, 255, 0, 0.5);
+  }
+  100% {
+    transform: scale(0.1) rotate(45deg) translateY(-20px);
+    background: linear-gradient(45deg, #ffffff, #ffffff);
+    box-shadow: 0 0 0px transparent;
     opacity: 0;
   }
 }
