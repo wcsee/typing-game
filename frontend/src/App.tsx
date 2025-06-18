@@ -54,6 +54,20 @@ function App() {
   const [level, setLevel] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
 
+  // 音频引用
+  const backgroundMusicRef = useRef<HTMLAudioElement | null>(null);
+  const hitSoundRef = useRef<HTMLAudioElement | null>(null);
+
+  // 音频初始化
+  useEffect(() => {
+    if (backgroundMusicRef.current) {
+      backgroundMusicRef.current.volume = 0.3; // 设置背景音乐音量为30%
+    }
+    if (hitSoundRef.current) {
+      hitSoundRef.current.volume = 0.5; // 设置击中音效音量为50%
+    }
+  }, []);
+
   // 根据等级获取对应的单词库
   const getWordsForLevel = (level: number): string[] => {
     if (level <= 10) {
@@ -105,12 +119,31 @@ function App() {
     setLevel(1);
     setMoles([]);
     setCurrentInput('');
+    
+    // 播放背景音乐
+    if (backgroundMusicRef.current) {
+      backgroundMusicRef.current.currentTime = 0;
+      backgroundMusicRef.current.play().catch(console.error);
+    }
   };
 
   // 暂停/继续游戏功能
   const togglePause = () => {
     if (gameStarted && !gameOver) {
-      setIsPaused(prev => !prev);
+      setIsPaused(prev => {
+        const newPausedState = !prev;
+        
+        // 控制背景音乐
+        if (backgroundMusicRef.current) {
+          if (newPausedState) {
+            backgroundMusicRef.current.pause();
+          } else {
+            backgroundMusicRef.current.play().catch(console.error);
+          }
+        }
+        
+        return newPausedState;
+      });
     }
   };
 
@@ -153,6 +186,12 @@ function App() {
             ? { ...mole, isVisible: false } 
             : mole
         ));
+        
+        // 播放击中音效
+        if (hitSoundRef.current) {
+          hitSoundRef.current.currentTime = 0;
+          hitSoundRef.current.play().catch(console.error);
+        }
         
         // 延迟移除地鼠以显示消失动画
         setTimeout(() => {
@@ -201,6 +240,11 @@ function App() {
     } else if (timeLeft === 0) {
       setGameOver(true);
       setGameStarted(false);
+      
+      // 游戏结束时停止背景音乐
+      if (backgroundMusicRef.current) {
+        backgroundMusicRef.current.pause();
+      }
     }
   }, [gameStarted, gameOver, isPaused, timeLeft]);
 
@@ -287,6 +331,26 @@ function App() {
         )}
       </div>
       <Footer />
+      
+      {/* 音频元素 */}
+      <audio
+        ref={backgroundMusicRef}
+        loop
+        preload="auto"
+        style={{ display: 'none' }}
+      >
+        <source src="/background-music.mp3" type="audio/mpeg" />
+        您的浏览器不支持音频播放。
+      </audio>
+      
+      <audio
+        ref={hitSoundRef}
+        preload="auto"
+        style={{ display: 'none' }}
+      >
+        <source src="/hit-sound.wav" type="audio/wav" />
+        您的浏览器不支持音频播放。
+      </audio>
     </div>
   );
 }
