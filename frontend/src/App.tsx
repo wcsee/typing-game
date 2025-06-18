@@ -52,6 +52,7 @@ function App() {
   const [gameStarted, setGameStarted] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [level, setLevel] = useState(1);
+  const [isPaused, setIsPaused] = useState(false);
 
   // 根据等级获取对应的单词库
   const getWordsForLevel = (level: number): string[] => {
@@ -106,6 +107,13 @@ function App() {
     setCurrentInput('');
   };
 
+  // 暂停/继续游戏功能
+  const togglePause = () => {
+    if (gameStarted && !gameOver) {
+      setIsPaused(prev => !prev);
+    }
+  };
+
   // 使用ref保存最新的状态值
   const gameStateRef = useRef<{
     gameStarted: boolean;
@@ -114,13 +122,14 @@ function App() {
     moles: Mole[];
     score: number;
     level: number;
-  }>({ gameStarted, gameOver, currentInput, moles, score, level });
-  gameStateRef.current = { gameStarted, gameOver, currentInput, moles, score, level };
+    isPaused: boolean;
+  }>({ gameStarted, gameOver, currentInput, moles, score, level, isPaused });
+  gameStateRef.current = { gameStarted, gameOver, currentInput, moles, score, level, isPaused };
 
   // 处理键盘输入
   const handleKeyPress = useCallback((e: KeyboardEvent) => {
-    const { gameStarted, gameOver, currentInput, moles, score, level } = gameStateRef.current;
-    if (!gameStarted || gameOver) return;
+    const { gameStarted, gameOver, currentInput, moles, score, level, isPaused } = gameStateRef.current;
+    if (!gameStarted || gameOver || isPaused) return;
     
     // 防止修饰键（Shift、Ctrl、Alt等）干扰输入
     if (e.ctrlKey || e.altKey || e.metaKey) return;
@@ -176,15 +185,15 @@ function App() {
   
   // 监听键盘事件
   useEffect(() => {
-    if (gameStarted && !gameOver) {
+    if (gameStarted && !gameOver && !isPaused) {
       window.addEventListener('keydown', handleKeyPress);
       return () => window.removeEventListener('keydown', handleKeyPress);
     }
-  }, [gameStarted, gameOver, handleKeyPress]);
+  }, [gameStarted, gameOver, isPaused, handleKeyPress]);
 
   // 游戏计时器
   useEffect(() => {
-    if (gameStarted && !gameOver && timeLeft > 0) {
+    if (gameStarted && !gameOver && !isPaused && timeLeft > 0) {
       const timer = setTimeout(() => {
         setTimeLeft(prev => prev - 1);
       }, 1000);
@@ -193,22 +202,27 @@ function App() {
       setGameOver(true);
       setGameStarted(false);
     }
-  }, [gameStarted, gameOver, timeLeft]);
+  }, [gameStarted, gameOver, isPaused, timeLeft]);
 
   // 地鼠生成器
   useEffect(() => {
-    if (gameStarted && !gameOver) {
+    if (gameStarted && !gameOver && !isPaused) {
       // 生成间隔随等级递减，最快每500毫秒生成一只
       const spawnInterval = Math.max(2500 - (level - 1) * 20, 500);
       const interval = setInterval(spawnMole, spawnInterval);
       return () => clearInterval(interval);
     }
-  }, [gameStarted, gameOver, level, spawnMole]);
+  }, [gameStarted, gameOver, isPaused, level, spawnMole]);
 
   return (
     <div className="App">
       <Header />
       {gameStarted && <GameStats score={score} timeLeft={timeLeft} level={level} />}
+      {gameStarted && !gameOver && (
+        <button className="pause-button" onClick={togglePause}>
+          {isPaused ? '▶️ 继续' : '⏸️ 暂停'}
+        </button>
+      )}
 
       <div className="game-area">
         {!gameStarted && !gameOver && (
@@ -261,6 +275,14 @@ function App() {
                 </div>
               ))}
             </div>
+            {isPaused && (
+              <div className="pause-overlay">
+                <div className="pause-message">
+                  <h2>⏸️ 游戏已暂停</h2>
+                  <p>点击右上角继续按钮恢复游戏</p>
+                </div>
+              </div>
+            )}
           </>
         )}
       </div>
