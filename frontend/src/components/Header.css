@@ -1,0 +1,80 @@
+.game-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 3px solid #5a67d8;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo {
+  font-size: 3rem;
+  animation: bounce 2s infinite;
+}
+
+.game-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(45deg, #fff, #f0f8ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@media (max-width: 768px) {
+  .game-header {
+    padding: 0.8rem 1rem;
+  }
+  
+  .logo {
+    font-size: 2.5rem;
+  }
+  
+  .game-title {
+    font-size: 1.5rem;
+  }
+  
+  .logo-section {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 2rem;
+  }
+  
+  .game-title {
+    font-size: 1.2rem;
+  }
+}

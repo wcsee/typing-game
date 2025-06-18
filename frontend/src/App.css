@@ -20,66 +20,9 @@ body {
   position: relative;
 }
 
-/* 游戏头部 */
-.game-header {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  padding: 20px;
-  text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.game-header h1 {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: gradientShift 3s ease infinite;
-}
-
 @keyframes gradientShift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
-}
-
-.game-stats {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  flex-wrap: wrap;
-}
-
-.stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.15);
-  padding: 15px 25px;
-  border-radius: 15px;
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.stat:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-}
-
-.stat-label {
-  font-size: 0.9rem;
-  opacity: 0.8;
-  margin-bottom: 5px;
-}
-
-.stat-value {
-  font-size: 1.8rem;
-  font-weight: bold;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* 游戏区域 */
@@ -90,6 +33,14 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-left: 180px; /* 为左侧统计面板留出空间 */
+}
+
+@media (max-width: 768px) {
+  .game-area {
+    margin-left: 0;
+    padding-top: 0;
+  }
 }
 
 /* 开始游戏界面 */

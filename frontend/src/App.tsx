@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import './App.css';
+import Header from './components/Header';
+import GameStats from './components/GameStats';
 import Footer from './components/Footer';
 
 interface Mole {
@@ -205,32 +207,8 @@ function App() {
 
   return (
     <div className="App">
-      <div className="game-header">
-        <h1>🐹 《快乐打地鼠》打字练习</h1>
-        <div className="game-stats">
-          <div className="stat">
-            <span className="stat-label">得分:</span>
-            <span className="stat-value">{score}</span>
-          </div>
-          <div className="stat">
-            <span className="stat-label">时间:</span>
-            <span className="stat-value">{timeLeft}s</span>
-          </div>
-          <div className="stat">
-            <span className="stat-label">等级:</span>
-            <span className="stat-value">{level}/100</span>
-          </div>
-          <div className="stat">
-            <span className="stat-label">练习:</span>
-            <span className="stat-value">
-              {level <= 10 ? '字母' : 
-               level <= 30 ? '简单' :
-               level <= 60 ? '中等' :
-               level <= 85 ? '困难' : '超难'}
-            </span>
-          </div>
-        </div>
-      </div>
+      <Header />
+      {gameStarted && <GameStats score={score} timeLeft={timeLeft} level={level} />}
 
       <div className="game-area">
         {!gameStarted && !gameOver && (
