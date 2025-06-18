@@ -24,12 +24,21 @@
   align-items: center;
   margin-left: 180px; /* 为左侧统计面板留出空间 */
   position: relative;
+  /* 确保游戏结束对话框相对于游戏区域定位 */
+  isolation: isolate;
 }
 
 @media (max-width: 768px) {
   .game-area {
     margin-left: 0;
     padding-top: 0;
+  }
+  
+  /* 移动设备上游戏结束对话框调整 */
+  .game-over {
+    min-width: 320px;
+    max-width: 90vw;
+    padding: 2rem 1.5rem;
   }
 }
 
@@ -222,56 +231,98 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(15px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: var(--z-pause);
-  animation: fadeIn 0.3s ease-out;
+  animation: fadeIn 0.4s ease-out;
 }
 
 .pause-message {
   background: var(--glass-bg);
   border: 2px solid var(--glass-border);
   border-radius: var(--radius-large);
-  padding: 3rem;
+  padding: 3rem 4rem;
   text-align: center;
-  backdrop-filter: blur(20px);
-  box-shadow: var(--shadow-heavy);
-  animation: slideIn 0.3s ease-out;
+  backdrop-filter: blur(25px);
+  box-shadow: var(--shadow-heavy), 0 0 40px rgba(72, 202, 228, 0.15);
+  animation: modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  min-width: 400px;
+  max-width: 500px;
+  position: relative;
+}
+
+.pause-message::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: var(--primary-gradient);
+  border-radius: var(--radius-large);
+  z-index: -1;
+  opacity: 0.3;
 }
 
 .pause-message h2 {
   color: var(--text-color);
-  margin-bottom: 1rem;
-  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.5px;
 }
 
 .pause-message p {
   color: var(--text-color);
-  margin-bottom: 2rem;
-  opacity: 0.8;
+  margin-bottom: 2.5rem;
+  opacity: 0.85;
+  font-size: 1.1rem;
+  line-height: 1.6;
 }
 
 .resume-button {
-  background: var(--primary-gradient);
+  background: var(--accent-gradient);
   border: none;
   color: var(--text-color);
-  padding: 12px 24px;
+  padding: 14px 32px;
   border-radius: var(--radius-large);
-  font-size: 1.1rem;
-  font-weight: bold;
+  font-size: 1.2rem;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: var(--shadow-medium);
+  box-shadow: var(--shadow-medium), 0 4px 20px rgba(72, 202, 228, 0.3);
   border: 2px solid var(--glass-border);
-  transition: var(--transition-normal);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.resume-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
 }
 
 .resume-button:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-heavy);
-  background: var(--accent-gradient);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-heavy), 0 8px 30px rgba(72, 202, 228, 0.4);
+  background: var(--primary-gradient);
+}
+
+.resume-button:hover::before {
+  left: 100%;
+}
+
+.resume-button:active {
+  transform: translateY(-1px);
 }
 
 /* 游戏结束界面 */
@@ -280,27 +331,47 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.9);
-  padding: 40px;
+  background: var(--glass-bg);
+  padding: 3rem 4rem;
   border-radius: var(--radius-large);
   text-align: center;
-  backdrop-filter: blur(15px);
+  backdrop-filter: blur(25px);
   border: 2px solid var(--glass-border);
+  box-shadow: var(--shadow-heavy), 0 0 40px rgba(72, 202, 228, 0.15);
   z-index: var(--z-game-over);
-  min-width: 300px;
+  min-width: 400px;
+  max-width: 500px;
+  animation: modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.game-over::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: var(--primary-gradient);
+  border-radius: var(--radius-large);
+  z-index: -1;
+  opacity: 0.3;
 }
 
 .game-over h2 {
   font-size: 2.5rem;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
   color: var(--accent-color);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 .game-over p {
   font-size: 1.2rem;
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
   opacity: 0.9;
+  color: var(--text-color);
+  line-height: 1.6;
 }
 
 .success-message {
@@ -315,50 +386,96 @@
 @keyframes successGlow {
   0% {
     text-shadow: 0 0 10px rgba(72, 202, 228, 0.5);
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 0 0 25px rgba(72, 202, 228, 0.8), 0 0 35px rgba(72, 202, 228, 0.6);
+    transform: scale(1.05);
   }
   100% {
-    text-shadow: 0 0 20px rgba(72, 202, 228, 0.8), 0 0 30px rgba(72, 202, 228, 0.6);
+    text-shadow: 0 0 10px rgba(72, 202, 228, 0.5);
+    transform: scale(1);
+  }
+}
+
+/* 模态框动画 */
+@keyframes modalSlideIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8) rotateY(20deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotateY(0deg);
   }
 }
 
 .game-over-buttons {
   display: flex;
-  gap: 15px;
+  gap: 20px;
   justify-content: center;
-  margin-top: 25px;
+  margin-top: 2.5rem;
   flex-wrap: wrap;
 }
 
 .restart-button, .home-button {
-  padding: 12px 25px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: white;
+  padding: 14px 32px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-color);
   border: none;
-  border-radius: var(--radius-round);
+  border-radius: var(--radius-large);
   cursor: pointer;
-  transition: var(--transition-normal);
-  min-width: 120px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 140px;
+  border: 2px solid var(--glass-border);
+  position: relative;
+  overflow: hidden;
+}
+
+.restart-button::before, .home-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
 }
 
 .restart-button {
   background: var(--accent-gradient);
-  box-shadow: var(--shadow-medium);
+  box-shadow: var(--shadow-medium), 0 4px 20px rgba(72, 202, 228, 0.3);
 }
 
 .restart-button:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-heavy);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-heavy), 0 8px 30px rgba(72, 202, 228, 0.4);
+  background: var(--primary-gradient);
+}
+
+.restart-button:hover::before {
+  left: 100%;
 }
 
 .home-button {
   background: var(--primary-gradient);
-  box-shadow: var(--shadow-medium);
+  box-shadow: var(--shadow-medium), 0 4px 20px rgba(138, 43, 226, 0.3);
 }
 
 .home-button:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-heavy);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-heavy), 0 8px 30px rgba(138, 43, 226, 0.4);
+  background: var(--accent-gradient);
+}
+
+.home-button:hover::before {
+  left: 100%;
+}
+
+.restart-button:active, .home-button:active {
+  transform: translateY(-1px);
 }
 
 /* 响应式设计 */
