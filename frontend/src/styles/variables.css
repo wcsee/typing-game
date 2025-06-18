@@ -43,6 +43,15 @@
   --transition-fast: all 0.2s ease;
   --transition-normal: all 0.3s ease;
   --transition-slow: all 0.5s ease;
+  
+  /* 层级管理 */
+  --z-mole: 10;
+  --z-stats: 50;
+  --z-header: 100;
+  --z-game-over: 200;
+  --z-pause: 999;
+  --z-footer: 1000;
+  --z-pause-button: 1001;
 }
 
 /* 通用页面样式 */

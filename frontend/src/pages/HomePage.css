@@ -17,16 +17,16 @@
   text-align: center;
   margin-bottom: 60px;
   padding: 50px 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
+  background: var(--glass-bg-light);
+  border-radius: var(--radius-large);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
 }
 
 .welcome-section h1 {
   font-size: 3.2rem;
   margin-bottom: 30px;
-  background: linear-gradient(45deg, #feca57, #ff6b6b, #48cae4);
+  background: var(--text-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -80,7 +80,7 @@
 
 .mode-card:hover {
   transform: translateY(-5px);
-  border-color: #feca57;
+  border-color: var(--accent-color);
   box-shadow: 0 10px 30px rgba(254, 202, 87, 0.3);
 }
 
@@ -90,14 +90,14 @@
 
 .mode-card.chapter-mode:hover {
   transform: none;
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--glass-border);
   box-shadow: none;
 }
 
 .mode-title {
   font-size: 1.8rem;
   font-weight: bold;
-  color: #feca57;
+  color: var(--accent-color);
   margin-bottom: 15px;
 }
 
@@ -115,7 +115,7 @@
   font-size: 1.1rem;
   font-weight: bold;
   color: var(--text-color);
-  border-radius: 25px;
+  border-radius: var(--radius-round);
   cursor: pointer;
   transition: var(--transition-normal);
   box-shadow: var(--shadow-medium);
@@ -123,7 +123,7 @@
 
 .start-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+  box-shadow: var(--shadow-heavy);
 }
 
 .chapter-selection {
@@ -151,14 +151,14 @@
   padding: 25px;
   color: white;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition-normal);
   text-align: center;
   backdrop-filter: blur(10px);
 }
 
 .chapter-button:not(.locked):hover {
   transform: translateY(-3px);
-  border-color: #feca57;
+  border-color: var(--accent-color);
   box-shadow: 0 8px 25px rgba(254, 202, 87, 0.3);
 }
 
@@ -169,7 +169,7 @@
 }
 
 .chapter-button.completed {
-  border-color: #48cae4;
+  border-color: var(--success-color);
   background: rgba(72, 202, 228, 0.2);
 }
 
@@ -197,17 +197,17 @@
   font-size: 0.9rem;
   font-weight: bold;
   padding: 5px 10px;
-  border-radius: 15px;
+  border-radius: var(--radius-medium);
   display: inline-block;
 }
 
 .chapter-status.unlocked {
-  color: #feca57;
+  color: var(--accent-color);
   background: rgba(254, 202, 87, 0.2);
 }
 
 .chapter-status.completed {
-  color: #48cae4;
+  color: var(--success-color);
   background: rgba(72, 202, 228, 0.2);
 }
 
@@ -240,12 +240,12 @@
   padding: 25px;
   text-align: center;
   backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  transition: var(--transition-normal);
 }
 
 .feature-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-medium);
 }
 
 .feature-icon {

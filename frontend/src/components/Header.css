@@ -3,12 +3,12 @@
 .game-header {
   background: var(--primary-gradient);
   color: var(--text-color);
-  padding: 1rem 2rem;
+  padding: 2rem 2rem;
   box-shadow: var(--shadow-light);
   position: sticky;
   top: 0;
-  z-index: 100;
-  border-bottom: 3px solid #5a67d8;
+  z-index: var(--z-header);
+  border-bottom: 3px solid var(--primary-color);
 }
 
 .header-content {
@@ -39,31 +39,31 @@
   font-weight: bold;
   margin: 0;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(45deg, #fff, #f0f8ff);
+  background: linear-gradient(45deg, var(--text-color), #f0f8ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .back-to-home-button {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: var(--glass-bg);
+  color: var(--text-color);
+  border: 2px solid var(--glass-border);
   padding: 0.5rem 1rem;
   border-radius: 25px;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition-normal);
   backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-medium);
 }
 
 .back-to-home-button:hover {
   background: rgba(255, 255, 255, 0.3);
   border-color: rgba(255, 255, 255, 0.5);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-heavy);
 }
 
 @keyframes bounce {

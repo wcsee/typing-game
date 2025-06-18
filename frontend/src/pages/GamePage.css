@@ -40,33 +40,33 @@
   text-align: center;
   margin-bottom: 20px;
   padding: 15px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
+  background: var(--glass-bg);
+  border-radius: var(--radius-small);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--glass-border);
 }
 
 .input-label {
-  color: #fff;
+  color: var(--text-color);
   font-size: 1.2rem;
   font-weight: bold;
   margin-right: 10px;
 }
 
 .input-text {
-  color: #feca57;
+  color: var(--accent-color);
   font-size: 1.5rem;
   font-weight: bold;
-
+  font-family: var(--font-mono);
   background: rgba(254, 202, 87, 0.2);
   padding: 5px 10px;
-  border-radius: 5px;
+  border-radius: var(--radius-small);
   min-width: 20px;
   display: inline-block;
 }
 
 .cursor {
-  color: #feca57;
+  color: var(--accent-color);
   font-size: 1.5rem;
   font-weight: bold;
   animation: blink 1s infinite;
@@ -84,11 +84,11 @@
 .moles-container {
   position: relative;
   width: 100%;
-  height: calc(100vh - 300px); /* 动态计算高度，减去其他元素的空间 */
+  height: calc(100vh - 300px);
   min-height: 400px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: var(--glass-bg-light);
+  border-radius: var(--radius-large);
+  border: 2px solid var(--glass-border);
   backdrop-filter: blur(10px);
   overflow: hidden;
   flex: 1;
@@ -98,9 +98,9 @@
 .mole {
   position: absolute;
   transform: translate(-50%, -50%);
-  transition: all 0.3s ease;
+  transition: var(--transition-normal);
   cursor: pointer;
-  z-index: 10;
+  z-index: var(--z-mole);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -151,7 +151,7 @@
 
 .mole:hover .mole-word {
   transform: scale(1.1);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-heavy);
 }
 
 /* 游戏结束界面 */
@@ -166,14 +166,14 @@
   text-align: center;
   backdrop-filter: blur(15px);
   border: 2px solid var(--glass-border);
-  z-index: 100;
+  z-index: var(--z-game-over);
   min-width: 300px;
 }
 
 .game-over h2 {
   font-size: 2.5rem;
   margin-bottom: 20px;
-  color: #feca57;
+  color: var(--accent-color);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
@@ -184,7 +184,7 @@
 }
 
 .success-message {
-  color: #48cae4;
+  color: var(--success-color);
   font-size: 1.4rem;
   font-weight: bold;
   margin: 20px 0;
@@ -215,30 +215,30 @@
   font-weight: bold;
   color: white;
   border: none;
-  border-radius: 25px;
+  border-radius: var(--radius-round);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition-normal);
   min-width: 120px;
 }
 
 .restart-button {
-  background: linear-gradient(45deg, #ff6b6b, #feca57);
-  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+  background: var(--accent-gradient);
+  box-shadow: var(--shadow-medium);
 }
 
 .restart-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+  box-shadow: var(--shadow-heavy);
 }
 
 .home-button {
-  background: linear-gradient(45deg, #667eea, #764ba2);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  background: var(--primary-gradient);
+  box-shadow: var(--shadow-medium);
 }
 
 .home-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+  box-shadow: var(--shadow-heavy);
 }
 
 /* 响应式设计 */
