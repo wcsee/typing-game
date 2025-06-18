@@ -9,7 +9,6 @@
 body {
   font-family: var(--font-family);
   overflow-x: hidden;
-  padding-bottom: 60px;
 }
 
 .App {
