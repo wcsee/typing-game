@@ -348,7 +348,7 @@ function App() {
         preload="auto"
         style={{ display: 'none' }}
       >
-        <source src="/hit-sound.wav" type="audio/wav" />
+        <source src="/hit-sound.mp3" type="audio/mpeg" />
         您的浏览器不支持音频播放。
       </audio>
     </div>
