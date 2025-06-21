@@ -44,15 +44,18 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
   const [moles, setMoles] = useState<Mole[]>([]);
   const [currentInput, setCurrentInput] = useState('');
   const [score, setScore] = useState(0);
+  const [totalScore, setTotalScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [gameStarted, setGameStarted] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [gamePaused, setGamePaused] = useState(false);
   const [level, setLevel] = useState(1);
   const [chapterLevel, setChapterLevel] = useState(1);
+  const [chapterCompleted, setChapterCompleted] = useState(false);
 
-  const [gameMode] = useState<'classic' | 'chapter'>(mode as 'classic' | 'chapter');
+  const [gameMode] = useState<'chapter'>('chapter');
   const [currentChapter] = useState(selectedChapter || 1);
+  const [showLevelUpEffect, setShowLevelUpEffect] = useState(false);
 
   // 音频引用
   const backgroundMusicRef = useRef<HTMLAudioElement>(null);
@@ -71,23 +74,15 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
   }, []);
 
   // 根据等级获取词汇
-  const getWordsForLevel = useCallback((currentLevel: number, mode: string, chapter: number): string[] => {
-    if (mode === 'chapter') {
-      switch (chapter) {
-        case 1: return LETTERS;
-        case 2: return EASY_WORDS;
-        case 3: return MEDIUM_WORDS;
-        case 4: return HARD_WORDS;
-        case 5: return EXPERT_WORDS;
-        default: return EASY_WORDS;
-      }
+  const getWordsForLevel = useCallback((currentLevel: number, chapter: number): string[] => {
+    switch (chapter) {
+      case 1: return LETTERS;
+      case 2: return EASY_WORDS;
+      case 3: return MEDIUM_WORDS;
+      case 4: return HARD_WORDS;
+      case 5: return EXPERT_WORDS;
+      default: return EASY_WORDS;
     }
-    
-    if (currentLevel <= 10) return LETTERS;
-    if (currentLevel <= 30) return EASY_WORDS;
-    if (currentLevel <= 60) return MEDIUM_WORDS;
-    if (currentLevel <= 85) return HARD_WORDS;
-    return EXPERT_WORDS;
   }, []);
 
   // 生成随机位置
@@ -99,8 +94,7 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
 
   // 生成地鼠
   const spawnMole = useCallback(() => {
-    const currentLevel = gameMode === 'chapter' ? chapterLevel : level;
-    const words = getWordsForLevel(currentLevel, gameMode, currentChapter);
+    const words = getWordsForLevel(chapterLevel, currentChapter);
     const word = words[Math.floor(Math.random() * words.length)];
     const position = getRandomPosition();
     const newMole: Mole = {
@@ -113,37 +107,31 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
 
     setMoles(prev => [...prev, newMole]);
 
-    // 根据等级调整地鼠显示时间
-    const hideTime = gameMode === 'chapter' 
-      ? Math.max(4000 - (currentLevel - 1) * 200, 1500)
-      : Math.max(5000 - (currentLevel - 1) * 50, 2000);
+    // 根据等级调整地鼠显示时间，每级减少150ms
+    const hideTime = Math.max(4000 - (chapterLevel - 1) * 150, 1000);
     
     setTimeout(() => {
       setMoles(prev => prev.filter(mole => mole.id !== newMole.id));
     }, hideTime);
-  }, [level, chapterLevel, gameMode, currentChapter, getWordsForLevel]);
+  }, [chapterLevel, currentChapter, getWordsForLevel]);
 
   // 开始游戏
   const startGame = useCallback(() => {
     setGameStarted(true);
     setGameOver(false);
     setScore(0);
+    setTotalScore(0);
     setMoles([]);
     setCurrentInput('');
-
-    
-    if (gameMode === 'chapter') {
-      setTimeLeft(90);
-      setChapterLevel(1);
-    } else {
-      setTimeLeft(60);
-      setLevel(1);
-    }
+    setTimeLeft(60);
+    setChapterLevel(1);
+    setChapterCompleted(false);
+    setShowLevelUpEffect(false);
 
     if (backgroundMusicRef.current) {
       backgroundMusicRef.current.play().catch(console.error);
     }
-  }, [gameMode]);
+  }, []);
 
 
 
@@ -161,14 +149,14 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
 
   // 更新游戏状态引用
   useEffect(() => {
-    gameStateRef.current = { gameStarted, gameOver, level, gameMode, currentChapter, chapterLevel };
-  }, [gameStarted, gameOver, level, gameMode, currentChapter, chapterLevel]);
+    gameStateRef.current = { gameStarted, gameOver, level, gameMode: 'chapter', currentChapter, chapterLevel };
+  }, [gameStarted, gameOver, level, currentChapter, chapterLevel]);
 
   // 键盘输入处理
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
     const { gameStarted, gameOver, level, gameMode, currentChapter, chapterLevel } = gameStateRef.current;
     
-    if (!gameStarted || gameOver || gamePaused) return;
+    if (!gameStarted || gameOver || gamePaused || showLevelUpEffect || chapterCompleted) return;
 
     const key = event.key;
     
@@ -198,19 +186,40 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
           setMoles(prev => prev.filter(mole => mole.id !== matchingMole.id));
         }, 500);
         
-        const currentLevel = gameMode === 'chapter' ? chapterLevel : level;
-        const points = 10 * currentLevel;
-        setScore(prev => prev + points);
+        // 新的计分规则：1 x 等级分数
+        const points = 1 * chapterLevel;
         
-        if (gameMode === 'chapter') {
-          if ((score + points) >= chapterLevel * 50 && chapterLevel < 10) {
-            setChapterLevel(prev => prev + 1);
-          }
-        } else {
-          if ((score + points) >= level * 50 && level < 100) {
-            setLevel(prev => prev + 1);
-          }
-        }
+        // 更新总分
+        setTotalScore(prev => prev + points);
+        
+        setScore(prev => {
+           const newScore = prev + points;
+           // 新的升级条件：20 x 当前等级分数
+           if (newScore >= chapterLevel * 20 && chapterLevel < 10) {
+             setChapterLevel(prevLevel => {
+               const nextLevel = prevLevel + 1;
+               // 显示升级庆祝效果
+               setShowLevelUpEffect(true);
+               setTimeout(() => setShowLevelUpEffect(false), 3000);
+               // 升级时重置分数和时间
+               setTimeLeft(60);
+               return nextLevel;
+             });
+             // 升级时分数重置为0
+             return 0;
+           } else if (newScore >= chapterLevel * 20 && chapterLevel >= 10) {
+             // 达到10级，关卡完成
+             setChapterCompleted(true);
+             setGameOver(true);
+             if (backgroundMusicRef.current) {
+               backgroundMusicRef.current.pause();
+             }
+             // 调用关卡完成回调
+             onChapterComplete(currentChapter);
+             return newScore;
+           }
+           return newScore;
+         });
         
         setCurrentInput('');
       } else if (!matchingMole) {
@@ -221,7 +230,7 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
     } else if (key === 'Escape') {
       setCurrentInput('');
     }
-  }, [currentInput, moles, score, chapterLevel, level, gameMode, gamePaused]);
+  }, [currentInput, moles, score, chapterLevel, level, gameMode, gamePaused, showLevelUpEffect, chapterCompleted]);
 
   // 键盘事件监听
   useEffect(() => {
@@ -242,7 +251,7 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
             }
             
             // 关卡模式结束时的处理
-            if (gameMode === 'chapter' && chapterLevel >= 10) {
+            if (chapterLevel >= 10) {
               onChapterComplete(currentChapter);
             }
             
@@ -257,14 +266,22 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
 
   // 地鼠生成器
   useEffect(() => {
-    if (gameStarted && !gameOver && !gamePaused) {
-      const currentLevel = gameMode === 'chapter' ? chapterLevel : level;
-      const baseInterval = gameMode === 'chapter' ? 2000 : 2500;
-      const spawnInterval = Math.max(baseInterval - (currentLevel - 1) * 20, 500);
-      const interval = setInterval(spawnMole, spawnInterval);
+    if (gameStarted && !gameOver && !gamePaused && !showLevelUpEffect && !chapterCompleted) {
+      // 基础生成间隔2000ms，每级减少100ms，最低300ms
+      const spawnInterval = Math.max(2000 - (chapterLevel - 1) * 100, 300);
+      
+      // 每级增加地鼠数量：等级1-3时每次生成1个，等级4-6时2个，等级7-10时3个
+      const molesPerSpawn = chapterLevel <= 3 ? 1 : chapterLevel <= 6 ? 2 : 3;
+      
+      const interval = setInterval(() => {
+        for (let i = 0; i < molesPerSpawn; i++) {
+          setTimeout(() => spawnMole(), i * 200); // 每个地鼠间隔200ms生成
+        }
+      }, spawnInterval);
+      
       return () => clearInterval(interval);
     }
-  }, [gameStarted, gameOver, gamePaused, level, chapterLevel, gameMode, spawnMole]);
+  }, [gameStarted, gameOver, gamePaused, showLevelUpEffect, chapterCompleted, chapterLevel, spawnMole]);
 
   // 自动开始游戏
   useEffect(() => {
@@ -291,13 +308,14 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
       <div className="game-container">
         {gameStarted && (
           <GameStats 
-            score={score} 
-            timeLeft={timeLeft} 
-            level={gameMode === 'chapter' ? chapterLevel : level}
-            gameMode={gameMode}
-            currentChapter={gameMode === 'chapter' ? currentChapter : undefined}
-            chapterName={gameMode === 'chapter' ? currentChapterInfo?.name : undefined}
-          />
+          score={score} 
+          totalScore={totalScore}
+          timeLeft={timeLeft} 
+          level={chapterLevel}
+          gameMode={gameMode}
+          currentChapter={currentChapter}
+          chapterName={currentChapterInfo?.name}
+        />
         )}
         
         <div className="game-area">
@@ -311,6 +329,23 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
               {gamePaused ? '▶️' : '⏸️'}
               <span>{gamePaused ? '继续' : '暂停'}</span>
             </button>
+          )}
+          
+          {/* 升级庆祝效果 */}
+          {showLevelUpEffect && (
+            <div className="level-up-effect">
+              <div className="fireworks">
+                <div className="firework">🎆</div>
+                <div className="firework">🎇</div>
+                <div className="firework">✨</div>
+                <div className="firework">🎉</div>
+                <div className="firework">🎊</div>
+              </div>
+              <div className="level-up-message">
+                <h2>🎉 升级了！🎉</h2>
+                <p>等级 {chapterLevel}</p>
+              </div>
+            </div>
           )}
 
           <div className="moles-container">
@@ -343,19 +378,19 @@ const GamePage: React.FC<GamePageProps> = ({ chapters, selectedChapter, onChapte
 
           {gameOver && (
             <div className="game-over">
-              <h2>游戏结束！</h2>
-              <p>最终得分: {score}</p>
-              {gameMode === 'chapter' ? (
+              {chapterCompleted ? (
                 <>
-                  <p>关卡: {currentChapterInfo?.name}</p>
-                  <p>关卡等级: {chapterLevel}/10</p>
-                  {chapterLevel >= 10 && (
-                    <p className="success-message">🎉 恭喜完成关卡！</p>
-                  )}
+                  <h2>🎉 关卡完成！</h2>
+                  <p className="success-message">恭喜您完成了 {currentChapterInfo?.name} 关卡！</p>
+                  <p>已达到最高等级 10 级</p>
                 </>
               ) : (
-                <p>达到等级: {level}</p>
+                <h2>游戏结束！</h2>
               )}
+              <p>本轮得分: {score}</p>
+              <p>总分: {totalScore}</p>
+              <p>关卡: {currentChapterInfo?.name}</p>
+              <p>关卡等级: {chapterLevel}/10</p>
               <div className="game-over-buttons">
                 <button className="restart-button" onClick={startGame}>
                   再玩一次

@@ -3,30 +3,25 @@ import './GameStats.css';
 
 interface GameStatsProps {
   score: number;
+  totalScore: number;
   timeLeft: number;
   level: number;
-  gameMode?: 'classic' | 'chapter';
+  gameMode?: 'chapter';
   currentChapter?: number;
   chapterName?: string;
 }
 
 const GameStats: React.FC<GameStatsProps> = ({ 
   score, 
+  totalScore,
   timeLeft, 
   level, 
-  gameMode = 'classic',
+  gameMode = 'chapter',
   currentChapter,
   chapterName 
 }) => {
-  const getPracticeType = (level: number, gameMode: string, chapterName?: string): string => {
-    if (gameMode === 'chapter' && chapterName) {
-      return chapterName;
-    }
-    if (level <= 10) return '字母';
-    if (level <= 30) return '简单';
-    if (level <= 60) return '中等';
-    if (level <= 85) return '困难';
-    return '超难';
+  const getPracticeType = (chapterName?: string): string => {
+    return chapterName || '未知关卡';
   };
 
   return (
@@ -34,8 +29,16 @@ const GameStats: React.FC<GameStatsProps> = ({
       <div className="stat-card">
         <div className="stat-icon">🏆</div>
         <div className="stat-content">
-          <div className="stat-label">得分</div>
+          <div className="stat-label">本轮得分</div>
           <div className="stat-value">{score}</div>
+        </div>
+      </div>
+      
+      <div className="stat-card">
+        <div className="stat-icon">💎</div>
+        <div className="stat-content">
+          <div className="stat-label">总分</div>
+          <div className="stat-value">{totalScore}</div>
         </div>
       </div>
       
@@ -50,14 +53,12 @@ const GameStats: React.FC<GameStatsProps> = ({
       <div className="stat-card">
         <div className="stat-icon">📊</div>
         <div className="stat-content">
-          <div className="stat-label">{gameMode === 'chapter' ? '关卡等级' : '等级'}</div>
-          <div className="stat-value">
-            {gameMode === 'chapter' ? `${level}/10` : `${level}/100`}
-          </div>
+          <div className="stat-label">关卡等级</div>
+          <div className="stat-value">{level}/10</div>
         </div>
       </div>
       
-      {gameMode === 'chapter' && currentChapter && (
+      {currentChapter && (
         <div className="stat-card">
           <div className="stat-icon">🎯</div>
           <div className="stat-content">
@@ -71,7 +72,7 @@ const GameStats: React.FC<GameStatsProps> = ({
         <div className="stat-icon">📚</div>
         <div className="stat-content">
           <div className="stat-label">练习</div>
-          <div className="stat-value">{getPracticeType(level, gameMode, chapterName)}</div>
+          <div className="stat-value">{getPracticeType(chapterName)}</div>
         </div>
       </div>
     </div>
